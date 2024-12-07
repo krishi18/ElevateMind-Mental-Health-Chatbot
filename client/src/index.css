@@ -66,11 +66,11 @@ body {
   }
 }
 
-@keyframes spin-slow {
-  from {
+@keyframes spin {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
@@ -83,8 +83,8 @@ body {
   display: none;
 }
 .hide-scrollbar {
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .glassEffect {
@@ -97,7 +97,7 @@ body {
   background: linear-gradient(90deg, #3752ca, #7f30ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text; 
+  background-clip: text;
 }
 
 .bg-svg {
@@ -113,7 +113,7 @@ body {
   animation: loading 1.5s infinite linear;
   border-radius: 4px;
   height: 200px;
-  width: 100%; 
+  width: 100%;
 }
 
 @keyframes loading {
