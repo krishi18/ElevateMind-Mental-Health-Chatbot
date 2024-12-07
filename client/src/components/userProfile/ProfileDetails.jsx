@@ -7,7 +7,7 @@ import OptimizedImage from '../base/OptimizedImage';
 const ProfileDetails = memo(({ user }) => {
   console.log('user: ', user);
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 overflow-x-hidden">
       {user.profileImage && (
         <motion.div
           className="mb-0 flex-center"
@@ -73,7 +73,7 @@ const ProfileDetails = memo(({ user }) => {
       >
         <Mail className="text-primary" />
         <span className="font-semibold text-lg">Email:</span>
-        <span className="text-gray-100 text-wrap">{user.email}</span>
+        <span className="text-gray-100 text-wrap overflow-hidden">{user.email}</span>
       </motion.div>
 
       {user.bio && (
