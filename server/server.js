@@ -64,8 +64,8 @@ app.use((req, res, next) => {
   next(error);
 });
 
-// 00:08AM
-cron.schedule("0 8 * * *", async () => {
+// 09:00AM
+cron.schedule("0 9 * * *", async () => {
   try {
     const users = await User.find({ "preferences.notifications": true });
     console.log("%c Line:75 🍷 users", "color:#b03734", users);

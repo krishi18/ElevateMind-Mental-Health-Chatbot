@@ -1,11 +1,6 @@
-const { CLIENT_URL, APP_NAME, SUPPORT_MAIL } = require('../config/envConfig');
-const sendEmail = require('../config/nodemailer');
-const {
-  PASSWORD_RESET_REQUEST_TEMPLATE,
-  PASSWORD_RESET_SUCCESS_TEMPLATE,
-  VERIFICATION_EMAIL_TEMPLATE,
-  WELCOME_EMAIL_TEMPLATE
-} = require('../utils/emailTemplates');
+const { CLIENT_URL, APP_NAME, SUPPORT_MAIL } = require("../config/envConfig");
+const sendEmail = require("../config/nodemailer");
+const { PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE, REMINDER_EMAIL_TEMPLATE } = require("../utils/emailTemplates");
 
 const regardsMessage = `Your ${APP_NAME} Team`;
 
@@ -13,22 +8,19 @@ const sendDailyCheckinReminder = async (user) => {
   try {
     await sendEmail({
       to: user.email,
-      subject: 'Daily Mental Health Check-in Reminder',
-      text: `Hi ${user.name}, don't forget to complete your daily check-in!`,
+      subject: "Daily Mental Health Check-in Reminder",
+      html: REMINDER_EMAIL_TEMPLATE.replace("{name}", user.name).replace("{checkInURL}", CLIENT_URL).replace("{regardsText}", regardsMessage),
     });
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
   }
 };
 
 const sendVerificationEmail = async (email, verificationToken) => {
   const mailOptions = {
     to: email,
-    subject: 'Verify your email',
-    html: VERIFICATION_EMAIL_TEMPLATE.replace(
-      '{verificationCode}',
-      verificationToken
-    ).replace('{regardsText}', regardsMessage),
+    subject: "Verify your email",
+    html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}", verificationToken).replace("{regardsText}", regardsMessage),
   };
 
   try {
@@ -45,9 +37,7 @@ const sendWelcomeEmail = async (email, username) => {
   const mailOptions = {
     to: email,
     subject: `Welcome to ${APP_NAME}!`,
-    html: WELCOME_EMAIL_TEMPLATE.replace('{name}', username)
-      .replace('{regardsText}', regardsMessage)
-      .replace('{loginLink}', loginLink),
+    html: WELCOME_EMAIL_TEMPLATE.replace("{name}", username).replace("{regardsText}", regardsMessage).replace("{loginLink}", loginLink),
   };
 
   try {
@@ -64,11 +54,8 @@ const sendPasswordResetEmail = async (email, resetToken) => {
 
   const mailOptions = {
     to: email,
-    subject: 'Reset Your Password',
-    html: PASSWORD_RESET_REQUEST_TEMPLATE.replace(
-      '{resetURL}',
-      resetUrl
-    ).replace('{regardsText}', regardsMessage),
+    subject: "Reset Your Password",
+    html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}", resetUrl).replace("{regardsText}", regardsMessage),
   };
 
   try {
@@ -83,32 +70,24 @@ const sendPasswordResetEmail = async (email, resetToken) => {
 const sendResetSuccessEmail = async (email) => {
   const mailOptions = {
     to: email,
-    subject: 'Password Reset Successful',
-    html: PASSWORD_RESET_SUCCESS_TEMPLATE.replace(
-      '{regardsText}',
-      regardsMessage
-    ),
+    subject: "Password Reset Successful",
+    html: PASSWORD_RESET_SUCCESS_TEMPLATE.replace("{regardsText}", regardsMessage),
   };
 
   try {
     await sendEmail(mailOptions);
     console.log(`Password reset success email sent to ${email}`);
   } catch (error) {
-    console.error(
-      `Error sending password reset success email to ${email}:`,
-      error
-    );
-    throw new Error(
-      `Error sending password reset success email: ${error.message}`
-    );
+    console.error(`Error sending password reset success email to ${email}:`, error);
+    throw new Error(`Error sending password reset success email: ${error.message}`);
   }
 };
 
 const sendDeleteAccountEmail = async (email) => {
   const mailOptions = {
     to: email,
-    subject: 'Account Deleted',
-    html: 'Your account has been deleted.',
+    subject: "Account Deleted",
+    html: "Your account has been deleted.",
   };
   try {
     await sendEmail(mailOptions);
@@ -118,7 +97,6 @@ const sendDeleteAccountEmail = async (email) => {
     throw new Error(`Error sending account deletion email: ${error.message}`);
   }
 };
-
 
 module.exports = {
   sendVerificationEmail,
