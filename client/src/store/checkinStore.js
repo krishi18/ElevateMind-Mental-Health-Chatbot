@@ -1,4 +1,3 @@
-// src/store/checkinStore.js
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
@@ -6,25 +5,20 @@ import { responseHandler, errorHandler } from '../utils/responseHandler';
 import { apiUrl } from '../config/envConfig';
 import toast from 'react-hot-toast';
 
-// Set the API URL with a fallback for local development
 const API_URL = apiUrl || 'http://localhost:5000/api';
 
-// Enable Axios to include cookies with requests
 axios.defaults.withCredentials = true;
 
-// Zustand Store
 export const useCheckinStore = create(
   persist(
     set => ({
-      checkins: [], // List of check-ins
-      isLoading: false, // Loading state
-      error: null, // Error messages
-      message: null, // Success messages
+      checkins: [],
+      isLoading: false, 
+      error: null,
+      message: null, 
 
-      // Reset state utility
       resetState: () => set({ error: null, message: null }),
 
-      // Create a new check-in
       createCheckIn: async checkinData => {
         set({ isLoading: true });
         try {
@@ -38,7 +32,6 @@ export const useCheckinStore = create(
         }
       },
 
-      // Get all check-ins
       getAllCheckIns: async () => {
         set({ isLoading: true });
         try {
@@ -46,20 +39,17 @@ export const useCheckinStore = create(
           responseHandler(response, set, 'checkins');
         } catch (error) {
           errorHandler(error, set);
-          toast.error('Failed to fetch check-ins');
         } finally {
           set({ isLoading: false });
         }
       },
 
-      // Delete a check-in by ID
       deleteCheckIn: async id => {
         set({ isLoading: true });
         try {
           await axios.delete(`${API_URL}/check-in/${id}`);
           set({ message: 'Check-in deleted successfully' });
 
-          // Fetch updated check-ins after deletion
           const response = await axios.get(`${API_URL}/check-in`);
           responseHandler(response, set, 'checkins');
 
@@ -74,8 +64,8 @@ export const useCheckinStore = create(
       },
     }),
     {
-      name: 'checkin', // Persistent store name
-      getStorage: () => localStorage, // Use localStorage for persistence
+      name: 'checkin',
+      getStorage: () => localStorage,
     }
   )
 );

@@ -1,4 +1,3 @@
-// src/pages/DashboardPage.jsx
 import React from 'react';
 import Dashboard from '../components/main/Dashboard';
 import CheckInForm from '../components/main/CheckInForm';

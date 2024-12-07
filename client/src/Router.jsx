@@ -21,7 +21,6 @@ import SignUpPage from './pages/authPages/SignUpPage';
 import ForgotPasswordPage from './pages/authPages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/authPages/ResetPasswordPage';
 import EmailVerificationPage from './pages/authPages/EmailVerificationPage';
-
 import DashboardPage from './pages/DashboardPage';
 
 // Lazy-loaded Pages
@@ -35,9 +34,9 @@ export default function Router() {
 
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 3000);
-    checkAuth(); // Check authentication on mount
+    checkAuth(); 
 
-    return () => clearTimeout(timeout); // Cleanup timeout
+    return () => clearTimeout(timeout); 
   }, [checkAuth]);
 
   if (loading) {
@@ -47,7 +46,6 @@ export default function Router() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
-        {/* Common Routes */}
         <Route element={<UserLayout />}>
           <Route
             index

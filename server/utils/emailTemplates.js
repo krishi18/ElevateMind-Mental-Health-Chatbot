@@ -205,37 +205,8 @@ const PASSWORD_RESET_REQUEST_TEMPLATE = `
 </html>
 `;
 
-const NEWSLETTER_SUBSCRIPTION_TEMPLATE = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Newsletter Subscription</title>
-</head>
-<body>
-  <p>Thank you for subscribing to our newsletter, {email}!</p>
-</body>
-</html>
-`;
-
-const CONTACT_FORM_TEMPLATE = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Contact Form Submission</title>
-</head>
-<body>
-  <h1>New Contact Form Submission</h1>
-  <p><b>Name:</b> {name}</p>
-  <p><b>Phone Number:</b> {phone}</p>
-  <p><b>Email:</b> {email}</p>
-  <p><b>Message:</b> {message}</p>
-</body>
-</html>
-`;
 
 module.exports = {
-  NEWSLETTER_SUBSCRIPTION_TEMPLATE,
-  CONTACT_FORM_TEMPLATE,
   VERIFICATION_EMAIL_TEMPLATE,
   PASSWORD_RESET_REQUEST_TEMPLATE,
   PASSWORD_RESET_SUCCESS_TEMPLATE,

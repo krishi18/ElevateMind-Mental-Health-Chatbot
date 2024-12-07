@@ -87,9 +87,7 @@ const UploadProfileImage = () => {
 
   return (
     <>
-      {/* Profile Update Section */}
       <div className="flex flex-col items-center space-y-6 overflow-hidden">
-        {/* Display Updated Profile Image */}
         {profileImageUrl && (
           <div className="flex flex-col items-center space-y-4 mt-4">
             {/* <img
@@ -116,7 +114,6 @@ const UploadProfileImage = () => {
             </p>
           </div>
         )}
-        {/* File Input Section */}
         <div className="w-full flex flex-col items-center space-y-4">
           {isFetchingProfile ? (
             <div className="flex flex-col items-center space-y-6 overflow-hidden">
@@ -126,21 +123,17 @@ const UploadProfileImage = () => {
                 <div className="h-4 w-32 bg-gray-300 animate-pulse rounded"></div>
               </div>
 
-              {/* Skeleton for File Input Section */}
               <div className="w-full flex flex-col items-center space-y-4">
                 <div className="h-12 w-full max-w-xs bg-gray-300 animate-pulse rounded"></div>
                 <div className="w-40 h-40 bg-gray-300 animate-pulse rounded"></div>
               </div>
 
-              {/* Skeleton for Upload Progress */}
               <div className="w-full">
                 <div className="h-4 w-full bg-gray-300 animate-pulse rounded"></div>
               </div>
 
-              {/* Skeleton for Upload Button */}
               <div className="h-12 w-full max-w-xs bg-gray-300 animate-pulse rounded"></div>
 
-              {/* Skeleton for Success/Error Messages */}
               <div className="h-4 w-3/4 bg-gray-300 animate-pulse rounded"></div>
             </div>
           ) : (
@@ -215,158 +208,3 @@ const UploadProfileImage = () => {
 };
 
 export default memo(UploadProfileImage);
-
-// import React, { useState, useRef, useEffect, memo } from 'react';
-// import { useUserProfileStore } from '../../store/userProfileStore';
-// import { uploadFileToCloudinary } from '../../services/apiService';
-// import axiosInstance from '../../services/axiosInstance';
-// import toast from 'react-hot-toast';
-// import LoadingSpinner from '../animations/loader/LoadingSpinner';
-// import ProgressBar from '../../components/global/ProgressBar';
-// import FileInputButton from '../../components/global/FileInputButton';
-// import ErrorThrower from '../base/ErrorThrower';
-
-// const UploadProfileImage = () => {
-//   const { user, fetchUserProfile, uploadProgress, error } =
-//     useUserProfileStore();
-//   const [selectedImage, setSelectedImage] = useState(null);
-//   const [isUploading, setIsUploading] = useState(false);
-//   const [isSuccess, setIsSuccess] = useState(false);
-//   const [displayProgress, setDisplayProgress] = useState(0);
-//   const [isFetchingProfile, setIsFetchingProfile] = useState(false);
-//   const [profileImageUrl, setProfileImageUrl] = useState(user.profileImage); // Initialize with current image
-//   const fileInputRef = useRef(null);
-
-//   // File change handler
-//   const handleImageChange = e => {
-//     const file = e.target.files[0];
-//     setSelectedImage(file);
-//     setIsSuccess(false);
-//   };
-
-//   useEffect(() => {
-//     if (isUploading && uploadProgress !== null) {
-//       const progressInterval = setInterval(() => {
-//         setDisplayProgress(prev => {
-//           if (prev < uploadProgress) return prev + 1;
-//           if (uploadProgress === 100) clearInterval(progressInterval);
-//           return prev;
-//         });
-//       }, 30);
-
-//       return () => clearInterval(progressInterval);
-//     }
-//   }, [uploadProgress, isUploading]);
-
-//   const handleUpload = async () => {
-//     if (selectedImage) {
-//       setIsUploading(true);
-//       setIsSuccess(false);
-
-//       try {
-//         const uploadedImageUrl = await uploadFileToCloudinary(
-//           selectedImage,
-//           progressEvent => {
-//             const progress = Math.round(
-//               (progressEvent.loaded * 100) / progressEvent.total
-//             );
-//             useUserProfileStore.setState({ uploadProgress: progress });
-//           },
-//           `profile_images/${user.username}`,
-//           'image',
-//           errorMessage => useUserProfileStore.setState({ error: errorMessage })
-//         );
-
-//         // Update the state with the new image URL
-//         setProfileImageUrl(uploadedImageUrl);
-
-//         setIsFetchingProfile(true);
-//         await axiosInstance.put('/user/profile', {
-//           profileImage: uploadedImageUrl,
-//         });
-
-//         await fetchUserProfile();
-
-//         setIsFetchingProfile(false);
-//         setDisplayProgress(100);
-//         setIsSuccess(true);
-//         toast.success('Profile picture updated!');
-//       } catch (error) {
-//         console.error('Error updating profile image:', error);
-//       } finally {
-//         setIsUploading(false);
-//         setTimeout(() => setDisplayProgress(0), 1500);
-//       }
-//     }
-//   };
-
-//   const handleImageClick = () => fileInputRef.current.click();
-
-//   return (
-//     <div className="bg-white p-6 rounded-lg shadow">
-//       {isFetchingProfile && <LoadingSpinner />}
-//       <h2 className="text-xl font-semibold mb-4">Upload Profile Image</h2>
-
-//       <FileInputButton
-//         fileInputRef={fileInputRef}
-//         onFileInputClick={handleImageClick}
-//         onFileChange={handleImageChange}
-//         isUploading={isUploading}
-//         acceptFileType="image/*"
-//         isFetchingProfile={isFetchingProfile}
-//       />
-
-//       {selectedImage && (
-//         <div className="mt-4">
-//           <p>Selected Image: {selectedImage.name}</p>
-//         </div>
-//       )}
-
-//       {isUploading && <ProgressBar progress={displayProgress} />}
-
-//       {isSuccess && (
-//         <div className="mt-4 text-green-500 font-semibold transition-all duration-500">
-//           🎉 Profile picture updated successfully!
-//         </div>
-//       )}
-
-//       {error && <ErrorThrower error={error} />}
-
-//       <button
-//         onClick={handleUpload}
-//         className={`${
-//           isUploading
-//             ? 'bg-gray-400 cursor-not-allowed'
-//             : 'bg-blue-500 hover:bg-blue-700'
-//         } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4`}
-//         disabled={isUploading || !selectedImage}
-//       >
-//         {isUploading ? (
-//           <span className="flex items-center">
-//             <svg
-//               className="animate-spin h-5 w-5 mr-3 border-t-2 border-white border-solid rounded-full"
-//               viewBox="0 0 24 24"
-//             ></svg>
-//             Uploading...
-//           </span>
-//         ) : (
-//           'Upload'
-//         )}
-//       </button>
-
-//       {/* Display the updated profile image */}
-//       <div className="mt-4">
-//         <h3 className="text-lg font-semibold">Current Profile Image:</h3>
-//         {profileImageUrl && (
-//           <img
-//             src={profileImageUrl}
-//             alt="Profile"
-//             className="mt-2 rounded-full w-24 h-24 object-cover"
-//           />
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default memo(UploadProfileImage);

@@ -10,6 +10,7 @@ import SpotlightButton from '../../components/framer-motion/ui/SpotlightButton';
 import ErrorThrower from '../../components/base/ErrorThrower';
 import EventLoggingButton from '../../components/global/EventLoggingButton';
 import GoogleLoginButton from '../../components/global/GoogleLoginButton';
+import { siteName } from '../../config/envConfig';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -27,24 +28,24 @@ const LoginPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative max-w-xl w-[95%] rounded-[20px_70px] p-2"
+        className="relative max-w-xl w-[95%] rounded-3xl p-2"
       >
         <BorderBeam
           colorFrom="#ffffff"
           size={550}
           borderWidth={9}
-          className={'rounded-[25px_75px] shadow-glow-primary'}
+          className={'rounded-3xl shadow-glow-primary'}
           duration={22}
           delay={18}
         />
-        <div className="  w-full ring-0 shadow-glow-primary rounded-[20px_70px] ring-cyber-purple">
-          <div className=" w-full bg-plain-black-background rounded-[20px_70px] dark:bg-plain-black-background bg-opacity-50 glass-panel shadow-glow-secondary dark:shadow-glow-secondary overflow-hidden">
+        <div className="  w-full ring-0 shadow-glow-primary rounded-3xl ring-cyber-purple">
+          <div className=" w-full bg-plain-black-background rounded-3xl dark:bg-plain-black-background bg-opacity-50 glass-panel shadow-glow-secondary dark:shadow-glow-secondary overflow-hidden">
             <div className="p-5">
               <h2 className="h1 text-text-subdued dark:text-dark-text font-share-tech-mono text-center">
                 Login
               </h2>
               <h5 className="text-center text-xl my-2 neon-text font-share-tech-mono">
-                by the AI-Driven Platform
+                Welcome To {siteName}
               </h5>
 
               <form

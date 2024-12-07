@@ -27,10 +27,8 @@ const {
 const { generateUniqueUsername } = require('../../utils/generateUniqueUsername');
 
 
-// Configure Google OAuth
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-// Configure Passport Google Strategy
 passport.use(
   new GoogleStrategy(
     {
@@ -43,25 +41,21 @@ passport.use(
         console.log('Profile:', profile);
         const { id, displayName, emails, photos } = profile;
 
-        // Check if the user already exists
         let user = await userModel.findOne({ googleId: id });
         console.log('user: ', user);
 
         if (!user) {
-          // Create new user with Google profile information
           user = await userModel.create({
             googleId: id,
             username: displayName,
             email: emails[0].value,
             profilePicture: photos[0].value,
-            isVerified: true, // Google accounts are inherently verified
+            isVerified: true, 
             lastLogin: Date.now(),
           });
 
-          // Send welcome email
           await sendWelcomeEmail(user.email, user.username);
 
-          // Create a notification for the new user
           await notificationModel.create({
             user: user._id,
             message: `Welcome to ${APP_NAME}, ${user.username}!`,
@@ -80,12 +74,10 @@ passport.use(
   )
 );
 
-// Serialize user for session storage
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-// Deserialize user from session
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await userModel.findById(id);
@@ -146,7 +138,6 @@ module.exports = {
 
       user.lastLogin = Date.now();
       await sendVerificationEmail(user.email, verificationToken);
-      // Send success response
       return sendSuccessResponse(
         res,
         'User registered successfully',
@@ -178,7 +169,6 @@ module.exports = {
     }
 
     try {
-      // Verify the Google token
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: GOOGLE_CLIENT_ID,
@@ -189,18 +179,15 @@ module.exports = {
 
       const { sub: googleId, email, name, picture } = payload;
 
-      // Check if user already exists
       let user = await userModel.findOne({ googleId });
 
       if (!user) {
         let username = name.toLowerCase().replace(/\s+/g, '');
 
-        // Check if the username already exists
         const existingUserWithUsername = await userModel.findOne({
           username,
         });
 
-        // Generate a unique username if necessary
         if (existingUserWithUsername) {
           username = await generateUniqueUsername(name);
         }
@@ -217,7 +204,6 @@ module.exports = {
 
           console.log('new user', user);
 
-          // Send welcome email
           await sendWelcomeEmail(user.email, user.username);
 
        
@@ -229,11 +215,9 @@ module.exports = {
           throw error;
         }
       } else {
-        // Update the last login time for existing users
         user.lastLogin = Date.now();
         await user.save();
       }
-      // Generate a JWT and set it in cookies
       generateTokenAndSetCookie(res, user._id);
 
       return sendSuccessResponse(res, 'Google login success', user, 200);
@@ -292,7 +276,6 @@ module.exports = {
         return handleError(next, 'User not found', 401);
       }
 
-      //check match password
       if (!(await comparePassword(password, user.password))) {
         return handleError(next, 'Invalid credentials', 401);
       }

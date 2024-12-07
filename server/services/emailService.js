@@ -1,14 +1,10 @@
-// services/emailService.js
-
 const { CLIENT_URL, APP_NAME, SUPPORT_MAIL } = require('../config/envConfig');
 const sendEmail = require('../config/nodemailer');
 const {
   PASSWORD_RESET_REQUEST_TEMPLATE,
   PASSWORD_RESET_SUCCESS_TEMPLATE,
   VERIFICATION_EMAIL_TEMPLATE,
-  WELCOME_EMAIL_TEMPLATE,
-  NEWSLETTER_SUBSCRIPTION_TEMPLATE,
-  CONTACT_FORM_TEMPLATE,
+  WELCOME_EMAIL_TEMPLATE
 } = require('../utils/emailTemplates');
 
 const regardsMessage = `Your ${APP_NAME} Team`;
@@ -123,48 +119,8 @@ const sendDeleteAccountEmail = async (email) => {
   }
 };
 
-const subscribeToNewsletter = async (email) => {
-  const mailOptions = {
-    to: email,
-    subject: 'Subscribe to our newsletter',
-    html: NEWSLETTER_SUBSCRIPTION_TEMPLATE.replace('{email}', email),
-  };
-  try {
-    await sendEmail(mailOptions);
-    console.log(`Newsletter subscription email sent to ${email}`);
-  } catch (error) {
-    console.error(
-      `Error sending newsletter subscription email to ${email}:`,
-      error
-    );
-    throw new Error(
-      `Error sending newsletter subscription email: ${error.message}`
-    );
-  }
-};
-
-const sendContactFormEmail = async (name, phone, email, message) => {
-  const mailOptions = {
-    to: SUPPORT_MAIL,
-    subject: `New Contact Form Submission from ${name}`,
-    html: CONTACT_FORM_TEMPLATE.replace('{name}', name)
-      .replace('{email}', email)
-      .replace('{message}', message)
-      .replace('{phone}', phone),
-  };
-
-  try {
-    await sendEmail(mailOptions);
-    console.log(`Contact form email sent to ${email}`);
-  } catch (error) {
-    console.error(`Error sending contact form email to ${email}:`, error);
-    throw new Error(`Error sending contact form email: ${error.message}`);
-  }
-};
 
 module.exports = {
-  sendContactFormEmail,
-  subscribeToNewsletter,
   sendVerificationEmail,
   sendWelcomeEmail,
   sendDailyCheckinReminder,

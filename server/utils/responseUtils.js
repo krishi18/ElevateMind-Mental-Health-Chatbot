@@ -23,10 +23,8 @@ const handleError = (next, message, statusCode , logMessage = null) => {
   next(new ErrorResponse(message, statusCode));
 };
 
-// Multer error handler
 const multerErrorHandler = (err, req, res, next) => {
   if (err instanceof multer.MulterError) {
-    // A Multer error occurred when uploading.
     if (err.code === "LIMIT_FILE_SIZE") {
       return handleError(next, "File size exceeds the limit.", 400);
     }
@@ -41,10 +39,8 @@ const multerErrorHandler = (err, req, res, next) => {
     }
     return handleError(next, "Multer error occurred.", 400);
   } else if (err) {
-    // An unknown error occurred when uploading.
     return handleError(next, "An unknown error occurred.", 500);
   }
-  // Everything went fine.
   next();
 };
 module.exports = {

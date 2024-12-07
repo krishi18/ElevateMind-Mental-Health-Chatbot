@@ -2,10 +2,10 @@ const { Router } = require("express");
 const multer = require("multer");
 const { getUserProfile, updateUserProfile, uploadProfileImage, changePassword, deleteUserProfile } = require("../controllers/user/profile.controller");
 const authMiddleware = require("../middlewares/authMiddleware");
-const storage = multer.memoryStorage(); // Store files in memory
+const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Set file size limit to 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 const { multerErrorHandler } = require("../utils/responseUtils");
 

@@ -1,4 +1,3 @@
-// src/store/authStore.js
 import { create } from 'zustand';
 import axiosInstance from '../services/axiosInstance';
 import { handleError } from '../utils/errorHandler';
@@ -12,26 +11,24 @@ export const useAuthStore = create(set => ({
   isCheckingAuth: true,
   message: null,
   signup: async (email, password, username) => {
-    set({ isLoading: true, error: null }); // Start with resetting error and loading state
+    set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.post(`/auth/signup`, {
         email,
         password,
         username,
       });
-      // Handle successful response and set the user data
       handleResponse(response, data => {
         set({
           user: data,
           isAuthenticated: true,
           isLoading: false,
-          error: null, // Clear error on success
+          error: null,
         });
       });
     } catch (error) {
-      // If an error occurs, set the error state and stop loading
       handleError(error, message => set({ error: message, isLoading: false }));
-      throw error; // Rethrow the error so that the UI knows not to navigate
+      throw error; 
     }
   },
 
@@ -51,7 +48,7 @@ export const useAuthStore = create(set => ({
       console.log('document.cookie', document.cookie);
     } catch (error) {
       handleError(error, message => set({ error: message, isLoading: false }));
-      throw error; // Rethrow the error so that the UI knows not to navigate
+      throw error;
     }
   },
 

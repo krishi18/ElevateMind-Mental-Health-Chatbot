@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Define the user schema
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -26,13 +25,13 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: function () {
-        return !this.googleId; // Require password only if googleId is not present
+        return !this.googleId;
       },
     },
     googleId: {
-      type: String, // Google user ID
+      type: String,
       unique: true,
-      sparse: true, // Allows multiple users without a Google ID
+      sparse: true,
     },
     phoneNumber: {
       type: String,
@@ -40,7 +39,7 @@ const userSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      default: "https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100270.jpg", // Default profile image
+      default: "https://res.cloudinary.com/dpkqselpi/image/upload/v1733561049/androgynous-avatar-non-binary-queer-person_23-2151100270_zjfy1q.avif",
     },
     bio: {
       type: String,
@@ -56,7 +55,7 @@ const userSchema = new mongoose.Schema(
     },
     isVerified: {
       type: Boolean,
-      default: false, // Email verification status
+      default: false,
     },
     verificationToken: {
       type: String,
@@ -86,14 +85,12 @@ const userSchema = new mongoose.Schema(
     ],
   },
   {
-    timestamps: true, // Automatically creates `createdAt` and `updatedAt` fields
+    timestamps: true,
   }
 );
-// Pre-save middleware to remove spaces from the username
 userSchema.pre("save", function (next) {
-  this.username = this.username.replace(/\s+/g, ""); // Remove all spaces
+  this.username = this.username.replace(/\s+/g, "");
   next();
 });
-// Export the User model
 const userModel = mongoose.model("User", userSchema);
 module.exports = userModel;

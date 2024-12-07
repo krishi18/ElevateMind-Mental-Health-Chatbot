@@ -1,7 +1,5 @@
-// controllers/check-in/checkIn.controller.js
-
 const CheckIn = require('../../models/checkIn.model');
-const User = require('../../models/user.model'); // Import User model
+const User = require('../../models/user.model');
 const {
   sendSuccessResponse,
   handleError,
@@ -9,15 +7,12 @@ const {
 const {
   awardBadge,
   calculateConsecutiveDays,
-} = require('../../services/gamificationService'); // Import gamification functions
+} = require('../../services/gamificationService');
 
-// Create a new Check-In
 const createCheckIn = async (req, res, next) => {
   try {
-    // Debug: Check if req.user exists
     console.log('req.user:', req.user);
 
-    // Validate req.user
     if (!req.user || !req.user._id) {
       console.error(
         'Authentication failed. req.user is undefined or missing _id.'
@@ -25,13 +20,11 @@ const createCheckIn = async (req, res, next) => {
       return res.status(401).json({ message: 'User is not authenticated' });
     }
 
-    // Input Validation
     const { moodRating, stressLevel, journalEntry } = req.body;
     if (!moodRating || moodRating < 1 || moodRating > 10 || !stressLevel) {
       return res.status(400).json({ message: 'Invalid check-in data' });
     }
 
-    // Prepare check-in data
     const checkInData = {
       ...req.body,
       userId: req.user._id,
@@ -40,7 +33,6 @@ const createCheckIn = async (req, res, next) => {
 
     const checkIn = await CheckIn.create(checkInData);
 
-    // Gamification: Award badges and update consecutive days
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -58,13 +50,10 @@ const createCheckIn = async (req, res, next) => {
   }
 };
 
-// Get All Check-Ins
 const getAllCheckIns = async (req, res, next) => {
   try {
-    // Debug: Check if req.user exists
     console.log('req.user:', req.user);
 
-    // Validate req.user
     if (!req.user || !req.user._id) {
       console.error(
         'Authentication failed. req.user is undefined or missing _id.'
@@ -87,7 +76,6 @@ const getAllCheckIns = async (req, res, next) => {
   }
 };
 
-// Delete a Check-In
 const deleteCheckIn = async (req, res, next) => {
   try {
     const checkIn = await CheckIn.findByIdAndDelete(req.params.id);

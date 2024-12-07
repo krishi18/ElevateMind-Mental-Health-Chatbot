@@ -1,4 +1,3 @@
-// App.js
 import React, { useMemo } from 'react';
 import Router from './Router';
 import { Toaster } from 'react-hot-toast';
