@@ -4,9 +4,9 @@ import plugin from 'tailwindcss/plugin';
 export default {
   content: [
     './index.html',
-    './src/**/*.{js,ts,jsx,tsx}', // Adjust paths if needed
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: 'class', // Use 'class' for manual dark mode toggling or 'media' for system preference
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -57,7 +57,6 @@ export default {
         'cyber-blue': '#00FFFF',
         'cyber-purple': '#9400D3',
 
-        // chat gpt
         'neon-pink': '#ff007a',
         'neon-blue': '#00f0ff',
         'neon-green': '#39ff14',
@@ -72,7 +71,7 @@ export default {
         'inner-subtle': 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
       },
       backgroundImage: {
-        'subtle-grid': 'var(--subtle-grid)', // Custom grid effect
+        'subtle-grid': 'var(--subtle-grid)',
         'radial-gradient': 'radial-gradient(var(--tw-gradient-stops))',
         'conic-gradient':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
@@ -255,7 +254,6 @@ export default {
             {}, // Glassmorphism effect
         },
 
-        // New button components
         '.btn': {
           '@apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary':
             {},

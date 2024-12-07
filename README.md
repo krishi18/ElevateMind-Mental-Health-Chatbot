@@ -93,6 +93,6 @@ SOFTWARE.
 
 ## Navigation:
 
-* [Features](Features.md):  Detailed overview of ElevateMind's features.
-* [API Documentation](API.md): Comprehensive API reference for developers.
-* [System Architecture](Architecture.md):  Technical overview of the application's architecture.
+* [Features](./docs/Features.md):  Detailed overview of ElevateMind's features.
+* [API Documentation](./docs/API.md): Comprehensive API reference for developers.
+* [System Architecture](./docs/Architecture.md):  Technical overview of the application's architecture.
