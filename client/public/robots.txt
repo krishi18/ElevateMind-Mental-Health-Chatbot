@@ -1,0 +1,41 @@
+# Global rules for all crawlers
+User-agent: *
+
+# Disallow crawling of specific directories and files
+Disallow: /api/.* # Protect API endpoints
+Disallow: /cgi-bin/ # Protect server scripts
+Disallow: /tmp/ # Protect temporary files
+Disallow: /*? # Disallow URLs with query parameters (consider allowing essential parameters if needed)
+Disallow: /search # Disallow search results pages (if they create duplicate content issues)
+
+# Allow crawling of essential resources
+Allow: *.css # Allow CSS files
+Allow: *.js # Allow JavaScript files
+Allow: *.png # Allow PNG images
+Allow: *.jpg # Allow JPG images
+Allow: *.jpeg # Allow JPEG images
+Allow: *.gif # Allow GIF images
+Allow: *.svg # Allow SVG images
+Allow: *.webp # Allow WebP images
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 2
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: YandexBot # Example of blocking a specific bot
+Disallow: /
+
+
+# Other bots
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: MJ12bot/v1.4.8
+Allow: /
