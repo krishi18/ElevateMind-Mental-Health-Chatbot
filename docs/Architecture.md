@@ -19,7 +19,7 @@ ElevateMind employs a three-tier architecture, consisting of a frontend, backend
                          Email Service (Nodemailer)
                                      |
                                      v
-                          Google Cloud Platform (Optional - Google Auth)
+                          Google Cloud Platform 
 
 
 ```
