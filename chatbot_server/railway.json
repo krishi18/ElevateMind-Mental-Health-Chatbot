@@ -1,8 +1,6 @@
 {
   "build": {
-    "command": "pip install -r requirements.txt"
-  },
-  "start": {
-    "command": "python chatbot_api.py"
+    "builder": "python",
+    "startCommand": "python chatbot_api.py"
   }
 }

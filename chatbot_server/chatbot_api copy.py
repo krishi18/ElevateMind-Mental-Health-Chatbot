@@ -12,13 +12,20 @@ import logging
 from torch.utils.data import DataLoader, Dataset, random_split
 import pandas as pd
 import torch.nn as nn
-import gdown  # For downloading model from Google Drive
+import psutil
 
 app = Flask(__name__)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def get_memory_usage():
+    # Get the current process memory usage
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    logging.info(f"Memory used: {memory_info.rss / 1024 / 1024} MB")  # in MB
+
+get_memory_usage()
 # --- Load necessary data and models ---
 # Load intents data from JSON
 def load_data():
@@ -105,18 +112,42 @@ model = BertClassifier(num_labels)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
-# Google Drive model download
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1JKHghyPgQxt0hcTUuuMNgEKI5m7zgxpF"
-MODEL_PATH = "trained_model.pth"
+# Model Loading Logic
+MODEL_PATH = 'trained_model.pth'
+if os.path.exists(MODEL_PATH):
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=device, weights_only = True))
+    logging.info("Trained model loaded successfully.")
+else:
+    # Splitting the dataset into training and validation
+    dataset = torch.utils.data.TensorDataset(input_ids, attention_masks, labels)
+    train_size = int(0.9 * len(dataset))
+    val_size = len(dataset) - train_size
+    train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+    train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=16)
+    validation_dataloader = DataLoader(val_dataset, batch_size=16)
 
-# If the model file doesn't exist locally, download it from Google Drive
-if not os.path.exists(MODEL_PATH):
-    logging.info("Downloading model from Google Drive...")
-    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+    # Initialize BERT model
+    
+    optimizer = AdamW(model.parameters(), lr=2e-5)
 
-# Load the model weights
-model.load_state_dict(torch.load(MODEL_PATH, map_location=device, weights_only=True))
-logging.info("Trained model loaded successfully.")
+    #Training the Model
+    epochs = 10 # Increased Epochs
+    for epoch in range(epochs):
+      model.train()
+      total_train_loss = 0
+      for batch in train_dataloader:
+          b_input_ids, b_input_mask, b_labels = tuple(t.to(device) for t in batch)
+          model.zero_grad()        
+          outputs = model(b_input_ids, attention_mask=b_input_mask)
+          loss = nn.CrossEntropyLoss()(outputs, b_labels)
+          total_train_loss += loss.item()
+          loss.backward()
+          optimizer.step()
+      avg_train_loss = total_train_loss / len(train_dataloader)            
+      logging.info(f"Epoch {epoch+1}, Average Training Loss: {avg_train_loss:.2f}")
+
+    torch.save(model.state_dict(), MODEL_PATH)
+    logging.info(f"Model trained and saved to {MODEL_PATH}")
 
 model.eval()  # Set model to evaluation mode
 
@@ -144,6 +175,7 @@ def get_response(user_input, language_code):
 
     with torch.no_grad():
       outputs = model(input_ids, attention_mask=attention_mask)
+
 
     probabilities = torch.nn.functional.softmax(outputs, dim=1).cpu().numpy()
 
