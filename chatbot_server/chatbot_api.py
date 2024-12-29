@@ -12,12 +12,20 @@ import logging
 from torch.utils.data import DataLoader, Dataset, random_split
 import pandas as pd
 import torch.nn as nn
+import psutil
 
 app = Flask(__name__)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def get_memory_usage():
+    # Get the current process memory usage
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    logging.info(f"Memory used: {memory_info.rss / 1024 / 1024} MB")  # in MB
+
+get_memory_usage()
 # --- Load necessary data and models ---
 # Load intents data from JSON
 def load_data():
